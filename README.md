@@ -5,6 +5,5 @@
   <img src="readme_img/logoR.png" width="250">
 </div>
 
-# Introduccion al documento
-
-El contenido de este documento se trata de apuntes y notas importantes del curso de analitica de datos aplicada dictado por [Jorge_Velez] (jivelez.github.io) 
+# Introduccion al documento 
+El contenido de este documento esta basado en mis apuentes del curso del mismo nombre dictado por [Jorge Velez](http://jivelez.github.io/) en la [Universidad del Norte](https://www.uninorte.edu.co/).
