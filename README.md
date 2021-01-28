@@ -7,4 +7,4 @@
 
 # Introduccion al documento
 
-El contenido de este documento se trata de apuntes y notas importantes del curso de analitica de datos aplicada dictado por [Jorge Velez] (jivelez.github.io) 
+El contenido de este documento se trata de apuntes y notas importantes del curso de analitica de datos aplicada dictado por [Jorge_Velez] (jivelez.github.io) 
