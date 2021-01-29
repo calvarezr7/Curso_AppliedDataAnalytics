@@ -31,7 +31,7 @@ El contenido de este documento esta basado en mis apuentes del curso del mismo n
       - [Classification and Regression Trees](#CART)
       - [Random Forest](#RF)
       - [Support Vector Machine](#SVM)
-      - [Neuronal Networks](#NN)
+      - [Neural Networks](#NN)
   - [Métodos Cuantitativos en Alta Dimensión](#MetCuantAD)
       - [Principal Component Analysis](#PCA)
       - [Multidimensional Scaling](#MDS)
