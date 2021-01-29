@@ -10,7 +10,7 @@ El contenido de este documento esta basado en mis apuentes del curso del mismo n
 
 # Tabla de contenido
   - [Introducción](#Introduccion)
-      - [Introducción a R/RStudio](#IntroR)
+      - [Introducción a R/RStudio](#Introducción-R-y-RStudio)
       - [Lectura, tipos y estructuras de datos, y operadores](#Lectura-tipos-estructuras)
       - [R markdown](#Rmarkdown)
       - [Data Science I](#DS1)
@@ -40,6 +40,31 @@ El contenido de este documento esta basado en mis apuentes del curso del mismo n
       - [Text mining](#Textmining)
       - [Principios de Geoanalítica](#Geoanalitica)
       - [Automatización de Reportes](AutReports)
+
+# Introduccion R y RStudio
+  ## ¿Qué es R?
+  <div align= "center">
+    <img src="readme_img/R_logo.png" width="40%">
+  </div>  
+
+  [R](https://www.youtube.com/watch?v=XcBLEVknqvY) es un entorno de programación y lenguaje para el análisis gráfico y **estadístico** de *datos* que fue creado por [Robert Gentleman](https://en.wikipedia.org/wiki/Robert_Gentleman_(statistician)) y [Ross Ihaka](https://en.wikipedia.org/wiki/Ross_Ihaka) en Agosto de 1993.
+  Este es un lenguaje orientaod a objetos y es multiplataforma, es similar al lenguaje S, pero bajo licencia GNU. Proporciona una gran cantidad de métodos estadísticos y gráficos, además de ser altamente extendible.
+  ## ¿Qué es RStudio?
+  <div align= "center">
+    <img src="readme_img/RStudio.png" width="40%">
+  </div>
+
+  [RStudio](https://www.youtube.com/watch?v=XcBLEVknqvY) es el entorno de desarrollo integrado (IDE). Este incluye una consola, un editor de sintaxis resaltado y soporta la ejecución directa del codigo, así como herramientas para gráficos, historial de acciones, workspace, etc.
+
+  Análogamente R sería como el motor de un carro, y RStudio sería el "cascarón" y resto de feautres del carro. Sin el motor, el carro no funciona, pero sin el cascaron el motor si puede funcionar.
+
+  ## Paquetes de R    
+  Los paquetes o *packages* son una colección de funciones y conjuntos de datos que ayudan a potencializar las funcionalidades de R, cada paquete tiene su documentación. A día de hoy existen más de 17000 paquetes, algunos ejemplos conocidos son: MASS, ggplot2, shiny, caret, entre otros.
+  <div align= "center">
+    <img src="readme_img/Packages.png" width="40%">
+  </div>
+
+
 
 
 
