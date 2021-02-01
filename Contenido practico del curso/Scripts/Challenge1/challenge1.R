@@ -1,8 +1,9 @@
+devtools::install_github("mattflor/chorddiag")
+library(chorddiag)
 library(ggplot2)
 ## Lectura de datos
 datos <- scan("gen.txt", what = character())
 splitdatos <- strsplit(datos, split = character())
-prueba <- unlist(splitdatos)
 # Longitud de caracteres y numero de bases.
 cont <- 0
 contA <- 0
@@ -17,21 +18,24 @@ contT <- contT + sum(splitdatos[[i]] == "T")
 contG <- contG + sum(splitdatos[[i]] == "G")
 contC <- contC + sum(splitdatos[[i]] == "C")
 }
-#Gráfico de frecuencias.
 Bases <- c("A", "T", "G", "C")
 Frecuencias <- c(contA, contT, contG, contC)
 datosbase <- data.frame(Bases,Frecuencias)
-ggplot(data = datosbase) +
-  geom_bar(mapping = aes(x = Bases, y = Frecuencias, fill = Bases), stat = "identity")+
-  labs(title = "Frecuencia de las bases en la muestra del gen")+
-  scale_y_continuous(limits = c(0,250000))
+#Gráfico de frecuencias.
+ggplot(datosbase) + geom_col(aes(x = Bases, y = Frecuencias,
+                                 fill = Bases), colour = "gray15", alpha=0.75)+
+  ylab("Porcentaje") + geom_text( aes(x = Bases,y = Frecuencias*0.85,
+                                      label = Frecuencias) )+
+  labs(fill="Bases")+
+  scale_fill_brewer(palette = "Spectral",type = "div", name="Base") + theme_bw()
 
-#
+# Probabilidad condicional
+
 tabla_conteo <- matrix(0, nrow = 4, ncol = 4)
 row.names(tabla_conteo) <- Bases
 colnames(tabla_conteo) <- Bases
-
 ant_s <- "A"
+
 for (i in 1:8319) {
   for (j in 1:70) {
     if (i==1 & j ==1) {
@@ -64,7 +68,14 @@ for (i in 1:8319) {
   }
   
 }
-tabla_conteo <- tabla_conteo/(cont-1)
+  for (i in 1:4) {
+  tabla_conteo[i,] <- tabla_conteo[i,]/datosbase[i,2]
+}
+#Diagrama chord
 
+groupColors <- c("#D7191C", "#FDAE61", "#ABDDA4", "#2B83BA")
+dimnames(tabla_conteo) <- list(From = c("A", "C", "G", "T"), To =c("A", "C", "G", "T"))
+p <- chorddiag(t(tabla_conteo), groupColors = groupColors, groupnamePadding = 30, 
+               tickInterval = 0.05, type = "bipartite")
 
 
