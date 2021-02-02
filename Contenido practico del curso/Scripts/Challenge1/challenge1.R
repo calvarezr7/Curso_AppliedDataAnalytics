@@ -21,10 +21,10 @@ contC <- contC + sum(splitdatos[[i]] == "C")
 Bases <- c("A", "T", "G", "C")
 Frecuencias <- c(contA, contT, contG, contC)
 datosbase <- data.frame(Bases,Frecuencias)
-#Gráfico de frecuencias.
+#GrÃ¡fico de frecuencias.
 ggplot(datosbase) + geom_col(aes(x = Bases, y = Frecuencias,
                                  fill = Bases), colour = "gray15", alpha=0.75)+
-  ylab("Porcentaje") + geom_text( aes(x = Bases,y = Frecuencias*0.85,
+  ylab("Frecuencias") + geom_text( aes(x = Bases,y = Frecuencias*0.85,
                                       label = Frecuencias) )+
   labs(fill="Bases")+
   scale_fill_brewer(palette = "Spectral",type = "div", name="Base") + theme_bw()
