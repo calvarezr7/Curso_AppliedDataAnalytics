@@ -13,7 +13,7 @@ El contenido de este documento esta basado en mis apuntes del curso del mismo no
       - [Introducción a R/RStudio](#Introducción-R-y-RStudio)
       - [Lectura, tipos y estructuras de datos, y operadores](#Lectura-tipos-y-estructuras-de-datos-y-operadores)
       - [R Markdown](#R-Markdown)
-      - [Data Science I](#DS1)
+      - [Data Science I](#Data-Science-I)
       - [Data Science II](#DS2)
   - [Análisis y vistualización](#AnalisisyVis)
       - [Analisis exploratorio de datos I](#AED1)
@@ -196,9 +196,62 @@ Para empezar a crear un archivo de R Markdown (que tiene por extensión ***.Rmd*
   File > New File > R Markdown...
   ```
 
+# Data Science I
+  En los ultimos años se ha vuelto popular la frase de Clive Humby "Data is the new oil" y nos ha hecho caer en cuenta en lo importante que están siendo los datos en la actualidad, y  se hablan mucho de diferentes términos especialmente de *Data Science*. Pero, ¿Que es realmente [Data Science](https://www.youtube.com/watch?v=X3paOmcrTjQ)?. 
 
+  Data Science es un conjunto de disciplinas que te dan las herramientas necesarias para transformar y extraer datos crudos y convertirlos en información util. A esto se le relaciona con el cuarto paradigma de [Jim Gray]("https://en.wikipedia.org/wiki/Jim_Gray_(computer_scientist)") (data-driven).
 
+  ## Flujo de trabajo en D.S.
 
+  El work flow en ciencia de datos consiste básicamente en:
+  - Primeramente y probablemente lo más importante es **entender el negocio** para saber en que contexto vamos a trabajar los diferentes modelos y las diferentes variables que influyen.
+  - **Descubrir** cuales son los datos que tenemos y cuales son los que no tenemos para buscar una manera de conseguirlos y así armar una base de datos completa que nos permita poco a poco armar el conocimiento. 
+  - **Preparar** los datos de forma que se facilite su análisis.
+  - **Modelamiento**. Crear modelos estadísticos, que de los muchos tipos que hay se debera definir cual es el ideal de acuerdo a la complejidad del negocio y al riesgo dispuesto a correr.
+  - **Validar** que tan bueno es el modelo para predecir datos ya vistos y no vistos, a través de partición de datos.
+  -  Calcular ciertas métricas que permitan **evaluar** que el modelo es bueno.
+  - **Desarrollo de la solución.** Como se entrega y como es la presentación de la solución (backend y frontend).
+  - Un paso transversal a todos los anteriormente mencionados está en ver como se puede hacer **optimización continua** de cada parte del workflow
+ 
+  <div align= "center">
+  <a href="http://www.anovaanalytics.com/data-science-consulting/">Imagen resumen</a> 
+  </div>
+ 
+  <div align= "center">
+    <img src="readme_img/wf.png" width="70%">
+  </div>
+  
+  ## Roles en Data Science
+  Como vimos en el workflow son muchas las diferentes funciones que se llevan a cabo en el proceso de ciencia de datos y es por esto que ultimamente no se habla de "*el Data Scientist*" sino de *equipos de Data Science* donde diferentes personas pueden tomar diversos [roles](https://www.mygreatlearning.com/blog/different-data-science-jobs-roles-industry/) según su especialidad. 
+
+  A manera personal, me gusta mucho la explicación y clasificación de los roles en el siguiente [diagrama](https://blog.acamica.com/oportunidades-de-carrera-en-ciencia-de-datos/)
+  
+  <div align= "center">
+    <img src="readme_img/1.jpg" width="100%">
+  </div>
+
+  ## Lenguajes
+  En Data Science los lenguajes más populares son Python y R pero se puede hacer Data Science con muchos [otros lenguajes](https://in.springboard.com/blog/data-science-programming-languages/)
+   <div align= "center">
+    <img src="readme_img/languages.png" width="100%">
+  </div>
+
+  ## ¿Que NO es Data Science?
+  Es bueno aclarar que ciencia de datos NO se trata de:
+
+  - **Machine Learning/ A.I.** : Si bien en el proceso de Data Science se pueden utilizar estas herramientas, es mucho más allá que eso.
+
+  - **Graficar en Excel** : Aunque una parte importante de Data Science es la presentación de la información a través de gráficos (*Data visualization*) el hacer graficos en excel no se puede considerar hacer Data Science.
+
+  - **Salvación de compañías**: Si la compañía no tiene una estructura para decidir y basarse en datos y los datos que tiene son basura lo que se obtendrá al analizar esos datos será basura (*Garbage in, Garbage out*)
+
+  ## Aplicaciones
+  
+  [Algunas aplicaciones](https://strideitsolutions.co.uk/data-science-services-2/)
+
+  <div align= "center">
+    <img src="readme_img/aplicationsds.png" width="100%">
+  </div>
 
 
 
