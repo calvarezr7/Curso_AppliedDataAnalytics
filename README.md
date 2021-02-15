@@ -14,7 +14,7 @@ El contenido de este documento esta basado en mis apuntes del curso del mismo no
       - [Lectura, tipos y estructuras de datos, y operadores](#Lectura-tipos-y-estructuras-de-datos-y-operadores)
       - [R Markdown](#R-Markdown)
       - [Data Science I](#Data-Science-I)
-      - [Data Science II](#DS2)
+      - [Data Science II](#Data-Science-II)
   - [Análisis y vistualización](#AnalisisyVis)
       - [Analisis exploratorio de datos I](#AED1)
       - [Analisis exploratorio de datos II](#AED2)
@@ -254,9 +254,26 @@ Para empezar a crear un archivo de R Markdown (que tiene por extensión ***.Rmd*
   </div>
 
 
+# Data Science II
+## Tipos de Analítica
+Los diferentes tipos de análisis que se pueden hacer, se pueden ver desde diferentes enfoques.
+- **Descriptivo** : Explicar lo que ya ha sucedido, mirar distribuciones de los datos, como se comportan, gráficos, medidas de posición o dispersión, etc.
+- **Diagnostica** : Una vez tenemos una variable respuesta, intentamos saber ¿Por qué pasó?
+- **Predictiva** : A partir del conocimiento de lo que ocurrío y por qué ocurrío intentamos desarrollar modelos que nos digan que podría pasar si esas variables previamente identificadas toman valores particulares.
+- **Prescriptiva** : A partir de la predicción, que se debe hacer desde ya para prepararse cuando se llegue a dicha predicción.
 
+<div align = "center">
+  <img src = "readme_img/tiposana.png" width = 90%>
+</div>
 
+Además existe una quinta área incipiente denonminada [**Analítica cognitiva**](https://www.ulster.ac.uk/cognitive-analytics-research/cognitive-analytics) 
 
+## Road maps
+Una [ruta](https://www.freecodecamp.org/news/data-science-learning-roadmap/) recomendable para empezar en data science en 2021
+
+<div align = "center">
+  <img src = "readme_img/roadmap.png" width = 100%>
+</div>
 
 
 
