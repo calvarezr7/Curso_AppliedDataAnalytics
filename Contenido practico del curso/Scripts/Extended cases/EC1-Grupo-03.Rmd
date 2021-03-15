@@ -1,0 +1,409 @@
+---
+title: "Extended Case #1"
+description: | 
+  Analítica de Datos Aplicada
+date: Marzo 8, 2021
+author:
+  - first_name: "Jorge I."
+    last_name: "Vélez"
+    url: https://jivelez.github.io/
+    affiliation: Universidad del Norte, Barranquilla, Colombia
+    orcid_id: 0000-0002-3146-7899
+output: distill::distill_article
+---
+
+Integrantes:
+
+* Camilo Álvarez
+* Mario Barrera
+* Jairo Castro
+* Camilo Ibañez
+* Isabel Vásquez
+* Jeffrey Villa
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(warn = -1)
+```
+
+```{r distill, echo=FALSE, eval=TRUE}
+## here we load the distill package
+## this package is important for the radix format
+if(!require(distill)) install.packages('distill')
+require(distill)
+
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+```
+
+## Contexto
+Como Grupo de Analítica en un banco, ustedes han sido contactados por el Departamento de Mercadeo para apoyar la segmentación de clientes. Por ello tienen acceso a una base de datos que corresponde a una muestra de clientes y sus saldos, además de algunas variables demográficas. La creencia inicial es que, a lo largo del país, los clientes podrían tener diferentes perfiles de egresos. A partir de estos perfiles, el banco planea diseñar productos financieros específicos.
+
+## El Problema
+El Departamento de Mercadeo quiere que, en parte, su Grupo de Analítica determine si existen diferencias importantes en los saldos de la cuentas bancarias cuando se realiza la segmentación de clientes por `age`, `job`, `education`, `marital status`, entre otras variables.
+
+## Contexto Analítico
+El conjunto de datos fue extraído de [Kaggle](https://www.kaggle.com/skverma875/bank-marketing-dataset). El objetivo es utilizar los elementos de EDA y visualización para entender este conjunto de datos, responder preguntas puntuales y generar otras en virtud de los análisis realizados
+
+Las variables relevantes en este caso son:
+
+1. `balance`: bank balance; key variable of interest
+2. `job`: the title of the job (`management`, `technician`, etc)
+3. `marital`: marital status (`single`, `married` or `divorced`)
+4. `education`: different levels of education (`primary`, `secondary`, `tertiary`, `unknown`)
+5. `default`: the customer defaulted (`yes` or `no`)
+6. `loan`: the customer took out a loan (`yes` or `no`)
+
+
+
+## Ejercicio 1
+Lea los datos y seleccione sólo las columnas correspondientes a las variables relevantes. Cuántos clientes se muestrearon este año? Recuerde que el archivo `bank-full.csv` se encuentra en [Google Drive](https://drive.google.com/drive/folders/1zvBt7WY9okCsghiuS7209-ia_R3P9tqt?usp=sharing).
+
+```{r eda1}
+## lectura de datos
+library(tidyverse)
+setwd("~/9no semestre/Analitica de datos/datasets")
+datos_banco<- read.csv("bank-full.csv", sep= ",",stringsAsFactors = T)
+datos_banco<- datos_banco%>%
+  select(balance, job, marital,education,default, loan, housing)
+numero_clientes<- nrow(datos_banco)
+```
+
+## Ejercicio 2
+Analice la variable `balance`. Qué explicación merece el hecho de que exista un rango tan amplio de los datos? Existen observaciones _sin sentido_?
+
+```{r eda2, echo=T}
+datos_banco$a <- 1
+
+ggplot(datos_banco,aes(x=a,y=balance)) +
+  geom_boxplot(fill="steelblue2")+
+  geom_hline(yintercept = (quantile(datos_banco$balance, 0.95)),color="red") +
+  geom_hline(color="green",yintercept = (quantile(datos_banco$balance, 0.75) + 1.5*(quantile(datos_banco$balance, 0.75) - quantile(datos_banco$balance, 0.25))))+
+  xlab("")+ theme_bw() + theme(axis.text.x = element_blank(),
+                               axis.ticks.x = element_blank(),
+                               plot.title = element_text(hjust = 0.5))+
+ annotate("text",x=1.25,y=17500,label = "Percentil 95", colour="red")+
+  annotate("text",x=1.25,y=12500,label = "3Q + 1.5*RIQ", colour="green")+
+  ggtitle(label = "Boxplot Balance Original")
+
+ggplot(datos_banco[datos_banco$balance<=quantile(datos_banco$balance, 0.95),],aes(x=a,y=balance)) +
+  geom_boxplot(fill="steelblue2")+
+  geom_hline(yintercept = (quantile(datos_banco$balance, 0.95)),color="red") +
+  xlab("")+ theme_bw() + theme(axis.text.x = element_blank(),
+                               axis.ticks.x = element_blank(),
+                               plot.title = element_text(hjust = 0.5))+
+ annotate("text",x=1.25,y=9000,label = "Percentil 95", colour="red")+
+  ggtitle(label = "Boxplot Balance sin 5% superior")
+
+  plot(ecdf(datos_banco$balance), las = 1, main="Distribución acumulada empírica del Balance")
+
+```
+
+La amplitud del rango se debe a que alrededor del 5% de las personas poseen un balance alto en comparación al resto, esto NO es considerado un _sin sentido_ debido a que son pocas las personas que poseen balances tan altos, a pesar de ser datos atípicos estos responden al contexto de la variable.
+
+## Ejercicio 3
+Use las variables `marital`, `education`, `default`, `job`, `housing`, `loan`. Cuál es la distribución de clientes en cada una de estas características?  Qué pasa con `balance` en cada caso?  Concluya.
+
+```{r eda3, echo=T}
+
+library(beanplot)
+
+datos_banco_tidy1 <- datos_banco %>% gather(var,category,job:housing)
+datos_banco_tidy2 <- datos_banco_tidy1 %>% group_by(var,category) %>% summarise(count=n())
+
+
+ggplot(datos_banco_tidy2) + geom_bar(stat = "identity",aes(x=category,
+                                                          y=count,
+                                                          fill=var),
+                                    color="gray15")+
+  facet_wrap(~var,scales = "free") +theme_bw()+scale_fill_brewer(palette = "Spectral")+
+  theme(axis.text.x = element_text(angle = 45,vjust = 0.4,size = 8))+
+  ggtitle(label = "Distribución de personas por variable")
+
+
+```
+
+Cuál es la distribución de clientes en cada una de estas características?  Qué pasa con `balance` en cada caso?  Concluya.
+
+#### Con respecto a la distribución de los clientes:
+
+* La distribución de clientes de acuerdo con la variable _default_ señala que la gran mayoría de personas se encuentran al día con sus pago.
+
+* La distribución de clientes de acuerdo con la variable _education_ indica que más de la mitad de las personas alcanzan una educación secundaria o terciaria, seguido de la primaria.
+
+* La distribución de clientes de acuerdo con la variable _housing_ indica que los usuarios que tienen casa y los que no poseen distribuciones similares.
+
+
+* La distribución de clientes de acuerdo con la variable _job_ muestra que los obreros, directivos, técnicos y administradores son los empleos la mayoría de usuarios del banco
+
+* La distribución de clientes de acuerdo con la variable _loan_ señala que alrededor de un 70% de las personas han pedido un préstamo.
+
+* La distribución de clientes de acuerdo con la variable _marital_ indica que la mayoría de usuarios son casados, seguido de la categoría de solteros y divorciados.
+
+
+```{r eda4, echo=T}
+
+a <- as.data.frame.matrix(matrix(0,ncol = 8))
+colnames(a) <- c("Var","Level","Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.")
+j=1;
+for (z in names(datos_banco)[-8]) {
+  for (i in levels(datos_banco[,z])) {
+    a[j,1]<- z ;a[j,2]<- i
+    a[j,c(-1,-2)] <- (summary(datos_banco[datos_banco[,z]==i,"balance"]))
+    j=j+1
+  }
+}
+rownames(a)<-NULL; a<- a %>% arrange(Var,-Median)
+
+
+
+ggplot(datos_banco) + geom_boxplot(aes(x = marital,y = balance,
+                                       fill=marital), 
+                                   color="gray30",outlier.colour = "gray20",
+                                   outlier.alpha = 0.15,outlier.size = 2)+
+  scale_fill_brewer(palette = "Set3",direction = -1)+theme_bw()+
+  ggtitle(label = "Distribución del balance según Estado Civil")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+knitr::kable(a[a$Var=="marital",-1], format="markdown")
+
+ggplot(datos_banco) + geom_boxplot(aes(x = education,y = balance,
+                                       fill=education), 
+                                   color="black",outlier.colour = "black",
+                                   outlier.alpha = 0.15,outlier.size = 2)+
+  scale_fill_brewer(palette = "Set3",direction = -1)+theme_bw()+
+  ggtitle(label = "Distribución del balance según Nivel de Educación")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+knitr::kable(a[a$Var=="education",-1], format="markdown")
+
+ggplot(datos_banco) + geom_boxplot(aes(x = default,y = balance,
+                                       fill=default), 
+                                   color="black",outlier.colour = "black",
+                                   outlier.alpha = 0.15,outlier.size = 2)+
+  scale_fill_brewer(palette = "Set3",direction = -1)+theme_bw()+
+  ggtitle(label = "Distribución del balance según si está en Mora o no")+
+  theme(plot.title = element_text(hjust = 0.5))#+
+  #geom_text(aes(x = "no",y = 50000, label=paste0(median(balance))), alpha=0.5)
+
+knitr::kable(a[a$Var=="default",-1], format="markdown")
+
+ggplot(datos_banco) + geom_boxplot(aes(x = loan,y = balance,
+                                      fill=loan), 
+                                   color="black",outlier.colour = "black",
+                                   outlier.alpha = 0.15,outlier.size = 2)+
+  scale_fill_brewer(palette = "Set3",direction = -1)+theme_bw()+
+  ggtitle(label = "Distribución del balance según si solicitó Préstamo o no")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+knitr::kable(a[a$Var=="loan",-1], format="markdown")
+
+ggplot(datos_banco) + geom_boxplot(aes(x = job,y = balance,
+                                       fill=job),
+                                   color="gray30",outlier.colour = "gray20",
+                                   outlier.alpha = 0.15,outlier.size = 2)+
+  scale_fill_brewer(palette = "Set3",direction = 1)+theme_bw()+
+  theme(axis.text.x = element_text(angle = 45,vjust = 0.4),plot.title = element_text(hjust = 0.5))+
+  ggtitle(label = "Distribución del balance según Empleo")
+
+knitr::kable(a[a$Var=="job",-1], format="markdown")
+
+
+ggplot(datos_banco) + geom_boxplot(aes(x = housing,y = balance,
+                                       fill=housing), 
+                                   color="black",outlier.colour = "black",
+                                   outlier.alpha = 0.15,outlier.size = 2)+
+  scale_fill_brewer(palette = "Set3",direction = -1)+theme_bw()+
+  ggtitle(label = "Distribución del balance según si tiene Casa o no")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+knitr::kable(a[a$Var=="housing",-1], format="markdown")
+
+```
+
+
+
+#### De acuerdo con la distribución del balance:
+
+* La distribución del balance de acuerdo con la variable _marital_ muestra que (dejando de un lado los datos aberrantes) los usuarios casados poseen un balance mayor, seguido de los casados y los divorciados.
+
+* La distribución del balance de acuerdo con la variable _education_ señala que las personas que realizaron estudios tercearios presentan balances más altos, seguido de las personas con estudios desconocidos, secundarios y primarios, de igual forma, la variabilidad de los balances para los de educación desconocida es la más baja, seguido de estudios de primaria, secundaria y terciaria.
+
+* La distribución del balance de acuerdo con la variable _default_ indica que los usuarios que se encuentran en Mora poseen por lo general un balance significativamente menor, hasta tal punto que por lo menos el 50% de estos poseen balances negativos, seguramente debido a deudas con el banco, además existen personas con balances positivos que deben ser cobradas sus deudas, por otra parte, al menos el 75% de los usuarios a paz y salvo poseen balances positivos.
+
+* La distribución del balance de acuerdo con la variable _loan_ muestra que las personas que han solicitado préstamos al banco tienen generalmente un balance significativamente menor a los de las personas que no han solicitado dinero prestado, por lo general el dinero de este ultimo grupo es cercano al doble del dinero de los  usuarios que han prestado al banco alguna vez.
+
+* La distribución de clientes de acuerdo con la variable _job_ señala que los empleos con balances mayores son los usuarios con perfil de retirado, perfil desconocido, puestos de gestión, perfil de desempleado y trabajadores independientes, por otro lado los cargos con balances mas bajos son, empleados de servicios, emprendedores, operarios, administradores y empleados del hogar.
+
+
+* La distribución del balance de acuerdo con la variable _housing_ muestra que las personas con hogar tienen generalmente un balance significativamente menor a los de las personas que NO tienen hogar, por lo general el dinero de este ultimo grupo es cercano al doble del dinero de los  usuarios que tienen casa.
+
+
+## Ejercicio 4
+El año pasado el balance promedio de los clientes del banco fue \$1341.12. Cuánto más alto es este año?  Podríamos pensar en que la diferencia, en caso de que exista, es estadísticamente significativa?  (_Nota:_ No realice la prueba de hipótesis -- use EDA para responder). 
+
+El balance promedio actual es de **`r paste0("$",round(mean(datos_banco$balance),3))`**, esto representa un aumento de **`r paste0("$",round(mean(datos_banco$balance)-1341.12,3)) %>% colorize("green") `**
+
+Se puede pensar que dicho aumento es significativo, sin embargo para validar esta sospecha se recomienda la realización de una prueba de hipotesis.
+
+
+```{r eda5, echo=T}
+
+datos_banco2_balance <- sort(datos_banco$balance,decreasing = T)
+
+datos_banco2_balance[1:(round(0.05*NROW(datos_banco)))] <- mean(datos_banco2_balance)
+
+diff <- paste0(round(mean(datos_banco$balance)-mean(datos_banco2_balance),3))
+
+```
+
+El promedio general sería de `r round(mean(datos_banco2_balance),3)`, en otras palabra, una reducción en **`r paste0("$",diff %>% colorize("red"))`**
+
+Por consiguiente, _*el aumento del balance promedio aunque significativo, NO representa (necesariamente) un incremente en el balance de la mayoría de personas.*_
+
+
+
+## Ejercicio 5
+En este banco estamos interesados en identificar diferencias entre grupos de clientes en términos del `balance` promedio. Sobre qué grupos deberíamos enfocarnos y por qué?  Cuál es el _mejor_ grupo de clientes para ofrecer un `loan`? Qué podemos decir de nuestros clientes de acuerdo con el tipo de `education`?.
+
+El banco debería enfocarse en los grupos de clientes formados por la variable `defualt` porque son los que mayor diferencia presentan entre los niveles de dicha categoría, con respecto al balance promedio. A continuaciónse muestra la tabla que soporta la decisión tomada.
+
+```{r eda6, echo=T}
+
+CV <- a %>% group_by(Var) %>% summarise(Coeficiente_de_Var=sqrt(var(Mean))/mean(Mean)) %>% arrange(-Coeficiente_de_Var)
+
+knitr::kable(CV, format="markdown")
+
+```
+
+
+## Ejercicio 6
+A partir de la variable `education` es posible realizar 6 comparaciones diferentes para el `balance` promedio.  Represente estas comparaciones gráficamente y concluya. Qué observa?.
+
+```{r eda7}
+library(lattice)
+
+myPanel <- function(x, y, z, ..., subscripts=subscripts) {
+    panel.levelplot(x=x, y=y, z=z, ..., subscripts=subscripts)        
+    panel.text(x = x[subscripts], 
+               y = y[subscripts], 
+               labels = round(z[subscripts], 1))
+}
+
+
+
+balanceedu <- with(datos_banco, tapply(balance, education, mean))
+mat <- outer(balanceedu, balanceedu,"-")
+mat[upper.tri(mat)] <- ""
+levelplot((mat), border = "black", panel = myPanel)
+
+
+
+```
+
+_Las cifras del gráfico fueron calculadas con las diferencias de las `filas` menos las `columnas`_
+
+Teniendo en cuenta el grafico:
+
+* La categoría `unknown` posee un balance promedio *superior* a la `primary` y `secondary`, sin embargo su balance promedio es inferior al nivel `tertiary` 
+
+* La categoría `tertiary` posee un balance promedio *superior* a la `primary` y `secondary`.
+
+* La categoría `secondary` posee un balance promedio *inferior* a la `primary`.
+
+## Ejercicio 7
+Cuáles son las profesiones donde un producto financiero podría ser más exitoso? Use, por ejemplo, la filosofía 80/20 del diagrama de  [Pareto](https://asq.org/quality-resources/pareto) para identificarlas.
+
+```{r eda8}
+library(qcc)
+datos<-datos_banco[,c("job", "loan","default")]
+dat<- datos[datos$default=="no",]
+
+trabajos<-table(dat$job)
+trabajos
+#install.packages("qcc",dependencies = TRUE)
+
+pareto.chart(trabajos, col=blues.colors(length(trabajos)), main="Pareto",
+             xlab="Jobs", ylab="Frecuencia", ylab2="Frecuencia Acumulada",
+             cumperc=seq(0,100, by=20))
+
+
+```
+
+Las profesiones de `blue-collar , management, technician, admin. y services` representan aproximadamente el *80%* de los usuarios que NO se encuentran en Mora, y por consiguiente el grupo de personas ideales para ofrecerles un producto financiero
+
+
+## Ejercicio 8
+Teniendo en cuenta las respuestas a los Ejercicios anteriores, plantee por lo menos tres preguntas de interés para la Gerencia del banco y resuélvalas usando EDA. 
+
+## Pregunta 1
+Se desea realizar un análisis comparativo para conocer si a diferentes niveles de estudios los clientes cumplen más o menos con sus deudas para responder la siguiente pregunta. ¿El factor de educación es significativo en el pago de las deudas de los clientes?
+
+```{r q1}
+library(ggplot2)
+
+ggplot(datos_banco) + geom_bar(aes(y=education,fill=default, x=..prop..,group=default),position = "fill")+ theme_bw() + scale_fill_brewer(palette = "Paired")+ geom_vline(xintercept = 0.5)
+
+```
+
+Teniendo en cuenta el grafico anerior, se concluye que no existen diferencias significativas en el cumplimiento de las deudas segun el cumplimiento de los cliente, esto debido a que todos los niveles se encuentran alrededor del 50% de la proporción de dicho cumplimiento.
+
+
+### Pregunta 2
+
+El banco entiende como capacidad de endeudamiento un monto por del 70% del balance de las cuentas de los clientes que hasta el momento no tienen préstamos. En este momento se desea lanzar un producto préstamo cuyo monto mínimo sería de 1000USD. ¿Cuánto porcentaje de los clientes en total serían público objetivo de la campaña para este producto?
+
+```{r q2}
+
+num_clientes <- NROW(datos_banco[ 0.7*(datos_banco$balance) >= 1000 ,])
+por <- round(100*(num_clientes/NROW(datos_banco)),2)
+
+```
+El porcentaje de clientes en total identificados como público objetivo es de aproximadamente `r paste0(por,"%")`
+
+
+## Pregunta 3
+
+¿Cuáles profesiones serían idóneas para ofrecerles la novedad del producto anterior?
+
+```{r q3}
+
+dat <- datos_banco %>% group_by(job) %>% summarise( num = sum((balance*0.7>=1000)) ,total = sum(a), por = round(100*num/total,2)) %>% arrange(-por)
+
+dat%>%arrange(por)%>% mutate(job=factor(job,levels = job))%>%
+ggplot(aes(x=job,y=por))+geom_segment(aes(xend=job, yend=0))+
+    geom_point(size=5,color="black")+geom_point(size=4.15,aes(color=job))+ coord_flip() +theme_bw() + xlab("") + ylab("Porcentaje %") +theme(legend.position = "none")+
+  ggtitle("% de usuarios por profesión que cumplen para nuevo prodcuto financiero")+
+  scale_colour_brewer(palette = "Paired")
+
+```
+Haciendo uso del grafico, de acuerdo al requisito de capacidad de endeudamiento, las profesiones que mejor se adaptan son los de perfil desconocido, retirados y puestos de gestión.
+
+
+## Ejercicio 9
+Qué otras variables considera relevantes para futuras investigaciones y por qué?  Discuta con los miembros de su grupo. Cómo podríamos incluir dichas variables en un próximo EDA?  Qué información _nueva_ podría obtenerse si la Gerencia accediera a realizar dicho registro de datos?.
+
+Consideramos relevante la incorporación de las siguientes variables:
+
+1. Ciudad de residencia. 
+2. Número de hijos. 
+3. Género.
+
+Conociendo la ciudad o lugar de residencia se pueden tomar decisiones estratégicas acerca de la promoción y localización de nuevos productos financieros. De igual forma, el numero de hijos y el género del usuario puede ayudar a deslumbrar conclusiones relevantes sobre el comportamiento de pago o motivo por el cual se adquiere un préstamo.
+
+En el siguiente EDA se podrían incorporar los siguientes añadidos:
+
+* Diagramas de disperción entre las variables número de hijos y genero contra balance, para verificar la existencia de posibles asociaciones entre dichas variables
+
+* Un mapa coroplético que incluya la frecuencia de usuarios morosos de acuerdo con la ciudad de residencia con el objetivo de  identificar las regiones de mayor concentraciön de deuda.
+
+* Un grafico de barras apiladas para definir si existe diferencia entre la capacidad de endeudamiento (como un porcentaje del balance) según el genero del usuario.
+
+
