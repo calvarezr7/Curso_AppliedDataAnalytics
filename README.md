@@ -16,11 +16,11 @@ El contenido de este documento esta basado en mis apuntes del curso del mismo no
       - [Data Science I](#Data-Science-I)
       - [Data Science II](#Data-Science-II)
   - [Análisis y vistualización](#AnalisisyVis)
-      - [Analisis exploratorio de datos I](#AED1)
-      - [Analisis exploratorio de datos II](#AED2)
-      - [Gráficos 1D/2D/3D](#Graficos)
+      - [Análisis exploratorio de datos I](#Análisis-exploratorio-de-datos-I)
+      - [Análisis exploratorio de datos II](#AED2)
+      - [Gráficos 1D/2D/3D](#Gráficos)
       - [Tablas de Contigencia](#Tablas-contingencia)
-      - [Prueba de Hipotesis](#Prueba-de-Hipoteisis)
+      - [Prueba de Hipotesis](#Prueba-de-Hipótesis)
   - [Modelos Predictivos](#ModPred)
       - [Regresión Lineal Simple y Multiple](#RLSyM)
       - [Bootstrap](#Bootstrap)
@@ -268,12 +268,109 @@ Los diferentes tipos de análisis que se pueden hacer, se pueden ver desde difer
 
 Además existe una quinta área incipiente denonminada [**Analítica cognitiva**](https://www.ulster.ac.uk/cognitive-analytics-research/cognitive-analytics) 
 
-## Road maps
+## Road map
 Una [ruta](https://www.freecodecamp.org/news/data-science-learning-roadmap/) recomendable para empezar en data science en 2021
 
 <div align = "center">
   <img src = "readme_img/roadmap.png" width = 100%>
 </div>
+
+
+# Análisis exploratorio de datos I
+
+El análisis exportorio de datos o EDA hace parte fundamental del trabajo de ciencia de datos y hace parte tanto de la analítica descriptiva y la analítica diagnostica, desde el punto de vista estadístico, se utilizan métodos y teorias desarrollados para recolectar, describir, analizar e interpretar información para tomar decisiones en presencia de variabilidad e incertidumbre.
+
+Es importante: 
+- Conocer las reglas y los métodos usados para tratar los datos (ETL)
+- Evaluar y cuantificar la importancia de los resultados estadísticos en contexto.
+- Entender mejor el fenómeno de interés.
+- Proporcionar una visión clara de los datos disponibles.
+
+Usos generales:
+- Informar al publico.
+- Hacer comparaciones.
+- Justificar una afirmación.
+- Establecer relaciones entre factores/variables.
+- Pronosticar posibles resultados.
+
+[Inducción, Deducción y Estadísticas](https://www.ajibot.com/blog/deduction-vs-induction-vs-abduction). En análitica de datos generalmente nos movemos en el campo de inducción (inferencial), donde tenemos unos datos o unas observaciones, con métodos análiticos encontramos algún patron, con ese patron generamos unas hipotesis y con esta hipotesis generamos una teoría. Esto no quiere decir que no se pueda utilizar metodos deductivos para los diferentes análisis.
+
+<div align = "center">
+  <img src = "readme_img/ids.png" width = 100%>
+</div>
+
+Una buena forma de entender mejor los datos es por medio de los gráficos, sin embargo es importante conocer dos factores clave para escoger el gráfico ideal: **El tipo de variable** y **La escala de medida**
+
+<div align = "center">
+  <img src = "readme_img/sumdataorg.png" width = 100%>
+</div>
+
+
+Explorartory Data Analysis (EDA) es un conjunto de recnicas que ayudan al investigador a entender los datos quetiene a la mano y la potencial relación con las variables analizadas. Los pasos recomendados son los siguientes:
+
+- Preparar los datos para aplicar alguna técnica estadística.
+- Usar gráficos descriptivos.
+- Estudiar asociaciones entre variables usando herramientas gráficas y correlaciones.
+- Evaluar si los supuestos que se tienen sobre los datos, se cumplen o no. Algunos supuestos básicos pueden ser normalidad, linealidad, homocedasticidad.
+- Evaluar, si es necesario, el impacto de datos faltantes.
+
+# Gráficos
+
+Una buena fuente de inspiración para la creación de gráficos puede ser la página [R Graph-Gallery](https://www.r-graph-gallery.com/)
+
+## Gráficos en 1D
+Este tipo de gráficos nos proporcionan información sobre la distribución de los datos, el comportamiento de una variable en el tiempo o por algún grupo de interés.
+
+Estos pueden servir muy bien para un *primer acercamiento* a los datos.
+
+Ejemplos:
+- Dotcharts
+- Boxplots
+- Beanplots
+- Violin plots
+- Histograms/barplots
+- Line plots (para Series de Tiempo)
+- ECDF
+- Ridgeline plot
+
+## Gráficos en 2D
+Este tipo de gráficos permiten explorar la relación entre dos variables cuantitativas, determinar si existen diferencias en la distribución/promedio de una variable cunatitativa vs. niveles de una variable cualitativa, y también identificar regiones de mayor concentración de datos.
+
+Ejemplos: 
+- Scatterplots
+- Boxplots y similares
+- Heatmaps
+
+## Gráficos en 3D
+Aunque este tipo de gráficos son menos frecuentes, se suelen usar en datos de estructura compleja (resultados de PCA y MDS) y se utilizan para explorar patrones en tripletas de variables e identificar regiones/elipses de mayor densidad de los datos. También se puede dar el caso de tener una cuarta variable de los datos que se trate de una variable categórica. 
+
+# Prueba de Hipótesis
+
+Las pruebas de hipótesis son una herramienta  de la estadística inferencial para determinar  el valor que podría tomar un parámetro en una población a partir de información de una muestra.
+
+Se compone de :
+- Una hipótesis nula (representada como H0) que asume que nada interesante ocurre, es decir que un parámetro es **igual** a un valor.
+- Una hipótesis alternativa (representada como H1) que asume una acción (mayor que, menor que, diferente) sobre el parametro y el valor asociado. Dependiendo de la acción la curva puede tener diferentes formas (Cola derecha, cola izquierda, dos colas, respectivamente.)
+
+## Tipos de errores
+  La realización de estas pruebas de hipótesis tienen asociados dos tipos de errores:
+  - Error tipo I (Alfa): Probabilidad de rechazar la hipótesis nula (H0), cuando en realidad es verdadera.
+  - Erro tipo II (Beta): Probabilidad de no rechazar la hipótesis nula (H0), cuando en realidad es falsa.
+  
+  En estás pruebas solo se puede controlar la probabilidad de error tipo I. Además, el calculo de (1 - Beta) se conoce como la potencia y es la capacidad que tiene la prueba de hipótesis de detectar una diferencia cuando realmente existe.
+
+## Tipos de pruebas de hipótesis
+  - Pruebas para 1 muestra
+  - Pruebas para 2 muestras:
+    - Dependientes
+    - Independientes 
+
+# Bootstrap
+
+
+
+
+
 
 
 
