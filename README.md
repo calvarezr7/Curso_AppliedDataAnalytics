@@ -22,7 +22,7 @@ El contenido de este documento esta basado en mis apuntes del curso del mismo no
       - [Tablas de Contigencia](#Tablas-contingencia)
       - [Prueba de Hipotesis](#Prueba-de-Hipótesis)
   - [Modelos Predictivos](#ModPred)
-      - [Regresión Lineal Simple y Multiple](#RLSyM)
+      - [Regresión Lineal Simple y Multiple](#Regresión-Lineal)
       - [Bootstrap](#Bootstrap)
       - [Regresión Logística](#Rlog)
       - [Regresión Poisson](Rpois)
@@ -367,10 +367,43 @@ Se compone de :
 
 # Bootstrap
 
+Es una técnica que consiste en hacer remuestreo de una muestra para agregar variabilidad y así estudiar la variabilidad de la población (a la cual no se puede acceder) a partir de esa primera muestra.
+El bootstrap permite calcular medidas de precisión para estimadores muestrales. El problema principal es que depende de la calidad de la muestra.
+
+<div align = "center">
+  <img src = "readme_img/bootstrap.png" width = 100%>
+</div>
+
+  ```
+  # Sea x un vector que contiene la muestra
+  replicate(100, sample(x, replace = TRUE))
+  # Se está haciendo un remuestreo de 100 muestras con remplazo a partir de la muestra x
+  ```
+ ```
+  # Ejemplo para mediana manual
+  ## algunos datos
+  x <- c(7,6,12,11,17,15,8,10)
+  ## valor muestral
+  median (x)
+  ## Estimación int. conf. 95% para el valor minimo
+  B <- 1000
+  mediana.boot <- replicate (1000, {
+    xsamp <- sample(x, replace = TRUE)
+    median(xsamp)
+  })
+  quantile(mediana.boot, probs = c(0.025, 0.975))
+  ```  
+  ```
+  # Ejemplo utilizando el paquete boot
+  # Sea f una función previamente creada que reciba como parametros el vector de datos y el index.
+  f <- function(x, index) sd(x[index])/mean(x[index])
+
+  #La función boot recibe el dataframe, la función y el numero de repeticiones (siempre es -1)
+  boot(x, f, R = 999)
+  ```
 
 
-
-
+ 
 
 
 
